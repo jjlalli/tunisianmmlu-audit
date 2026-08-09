@@ -34,4 +34,7 @@ a constrained answer tool rather than writing an invalid result.
 
 | | original |
 |---|---|
+| Gemini 3.1 Pro Global | 89.2% |
+| GPT-5.6 Sol | 88.0% |
+| Claude Sonnet 5 | 79.2% |
 | labess (Q4_K_M) | 29.0% |
