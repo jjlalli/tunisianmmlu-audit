@@ -6,4 +6,5 @@
 !score.py
 !run_all.sh
 !audit-sample-400-master.csv
+!audit-sample-400-corrected.csv
 !results-*.csv
