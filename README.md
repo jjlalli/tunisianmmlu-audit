@@ -34,9 +34,13 @@ By default, an unparsable response is recorded with `pred=-1`. Set
 `--openai-compatible` runs, `--unparsed-use-answer-tool` adds a constrained
 answer-tool fallback after that retry.
 
-| | original |
-|---|---|
-| Gemini 3.1 Pro Global | 89.2% |
-| GPT-5.6 Sol | 88.0% |
-| Claude Sonnet 5 | 79.2% |
-| labess (Q4_K_M) | 29.0% |
+| model | original | corrected | delta |
+|---|---|---|---|
+| Gemini 3.1 Pro (n=400) | 89.2 | | |
+| GPT-5.6 Sol (n=400) | 88.0 | | |
+| Claude Sonnet 5 (n=400) | 79.2 | | |
+| Qwen3-8B (4-bit, n=389) | 49.6 | 52.7 | +3.1 |
+| ESPRIT-Derja-8B (4-bit, n=389) | 47.6 | 52.4 | +4.9 |
+| Labess-7B (4-bit, n=389) | 29.6 | 29.8 | +0.3 |
+
+Open models: same-389-item comparison, constrained answers, refusals 0.
