@@ -1,5 +1,6 @@
 import argparse
 import contextlib
+import json
 import io
 import os
 import sys
@@ -131,6 +132,22 @@ class AskTransportTests(unittest.TestCase):
                 "seed": 1234,
             }],
         )
+
+    def test_ollama_uses_requested_retry_budget(self):
+        args = self.make_args(openai_compatible=False)
+        args.model = "ollama_chat/example"
+        response = mock.MagicMock()
+        response.read.return_value = b'{"message": {"content": "2"}}'
+
+        with mock.patch("urllib.request.urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value = response
+            result = ask(None, args, "prompt", 4, max_tokens=64)
+
+        request = urlopen.call_args.args[0]
+        body = json.loads(request.data)
+        self.assertEqual(result, "2")
+        self.assertEqual(body["options"]["num_predict"], 64)
+
 
 
 class ParseRetryTests(unittest.TestCase):

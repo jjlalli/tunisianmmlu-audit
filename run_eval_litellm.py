@@ -53,9 +53,10 @@ def build_prompt(item):
                          choices=numbered), len(choices)
 
 
-def ask_ollama(args, prompt, n_choices):
+def ask_ollama(args, prompt, n_choices, max_tokens=None):
     import json
     import urllib.request
+    token_budget = args.max_tokens if max_tokens is None else max_tokens
     schema = {"type": "object",
               "properties": {"answer": {"type": "integer",
                                         "minimum": 1, "maximum": n_choices}},
@@ -66,8 +67,12 @@ def ask_ollama(args, prompt, n_choices):
         "stream": False,
         "keep_alive": "30m",
         "format": schema,
-        "options": {"temperature": 0, "num_predict": 24,
-                    "seed": args.seed, "num_ctx": 2048},
+        "options": {
+            "temperature": 0,
+            "num_predict": token_budget,
+            "seed": args.seed,
+            "num_ctx": 2048,
+        },
     }).encode()
     req = urllib.request.Request(
         "http://localhost:11434/api/chat", data=body,
@@ -79,7 +84,7 @@ def ask_ollama(args, prompt, n_choices):
 def ask(completion, args, prompt, n_choices, max_tokens=None,
         force_answer_tool=False):
     if args.model.startswith("ollama_chat/") and not args.openai_compatible:
-        return ask_ollama(args, prompt, n_choices)
+        return ask_ollama(args, prompt, n_choices, max_tokens=max_tokens)
     token_budget = args.max_tokens if max_tokens is None else max_tokens
     messages = [{"role": "user", "content": prompt}]
     if args.openai_compatible:

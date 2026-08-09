@@ -29,8 +29,10 @@ Completed items are skipped, so interrupted runs can be resumed.
 to Ollama with a JSON-schema constrained answer; default runs use LiteLLM.
 `--openai-compatible` selects the provider-neutral direct transport and
 requires `--api-base` and `--api-key-env`; `--header` is repeatable.
-Unparsable responses retry once with a larger completion budget and then use
-a constrained answer tool rather than writing an invalid result.
+By default, an unparsable response is recorded with `pred=-1`. Set
+`--unparsed-retry-max-tokens` to retry once with a larger budget. For
+`--openai-compatible` runs, `--unparsed-use-answer-tool` adds a constrained
+answer-tool fallback after that retry.
 
 | | original |
 |---|---|
