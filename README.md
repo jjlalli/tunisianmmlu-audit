@@ -13,15 +13,24 @@ second pass over corrected items.
 
 ## Run
 
-```
-pip install litellm
-python3 run_eval_litellm.py --model openai/gpt-5 --tag gpt5 --max-tokens 256
-python3 score.py
+Install [uv](https://docs.astral.sh/uv/), synchronize the locked environment,
+and run the evaluator:
+
+```bash
+uv sync --locked
+uv run python run_eval_litellm.py --model openai/gpt-5 --tag gpt5 --max-tokens 256
+uv run python score.py
 ```
 
-`--items` swaps in the corrected subset. `ollama_chat/<model>` goes direct
-to Ollama with a JSON-schema constrained answer; everything else routes
-through LiteLLM.
+`./run_all.sh` runs the configured generic batch and then scores its results.
+Completed items are skipped, so interrupted runs can be resumed.
+
+`--items` swaps in the corrected subset. `ollama_chat/<model>` goes directly
+to Ollama with a JSON-schema constrained answer; default runs use LiteLLM.
+`--openai-compatible` selects the provider-neutral direct transport and
+requires `--api-base` and `--api-key-env`; `--header` is repeatable.
+Unparsable responses retry once with a larger completion budget and then use
+a constrained answer tool rather than writing an invalid result.
 
 | | original |
 |---|---|

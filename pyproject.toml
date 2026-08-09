@@ -1,0 +1,12 @@
+[project]
+name = "tunisianmmlu-audit"
+version = "0.1.0"
+description = "Model evaluation for the TunisianMMLU audit"
+requires-python = ">=3.11"
+dependencies = [
+    "litellm",
+    "openai",
+]
+
+[tool.uv]
+package = false
