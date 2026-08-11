@@ -41,10 +41,19 @@ answer-tool fallback after that retry.
 | Claude Sonnet 5 | 313/389 (80.5%) | 332/389 (85.3%) | +4.9 pp |
 | Qwen3-8B (4-bit) | 193/389 (49.6%) | 205/389 (52.7%) | +3.1 pp |
 | ESPRIT-Derja-8B (4-bit) | 185/389 (47.6%) | 204/389 (52.4%) | +4.9 pp |
-| Labess-7B (4-bit) | 115/389 (29.6%) | — | — |
+| Labess-7B (4-bit) | 115/389 (29.6%) | 116/389 (29.8%) | +0.3 pp |
 
 For a matched comparison, original predictions from `results-<tag>.csv` are
 filtered to the 389 item IDs in `audit-sample-400-corrected.csv` before
 scoring. Corrected scores come from `results-<tag>-corrected.csv`; 11 items
 from the 400-item master set are excluded. Deltas use the unrounded count
-fractions. Labess has no committed corrected run.
+fractions.
+
+Exact model identifiers:
+
+- Gemini 3.1 Pro — `google/gemini-3.1-pro-global`
+- GPT-5.6 Sol — `openai/gpt-5.6-sol`
+- Claude Sonnet 5 — `anthropic/claude-sonnet-5`
+- Qwen3-8B — `Qwen/Qwen3-8B` (4-bit)
+- ESPRIT-Derja-8B — `ESPRIT-Group/ESPRIT-Derja-Qwen3-8B-v2` (4-bit)
+- Labess-7B — `linagora/Labess-7b-chat-gguf` (`Q4_K_M`)
