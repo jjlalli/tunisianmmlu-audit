@@ -24,7 +24,7 @@ Every artifact is keyed to the original item identifier `subject::row` (row inde
 | `run_eval_litellm.py`, `score.py`, `paper_stats.py`, `run_all.sh` | Evaluation harness and the script that recomputes every model number in the paper. | MIT |
 | `results-<model>.csv`, `results-<model>-corrected.csv` | Per-item model answers on original and corrected text. | CC BY 4.0 |
 
-**Note on the corrected file.** The model runs reported in the paper used `audit-sample-400-corrected.csv` as it is here. For 173 of the 333 FIXABLE items that file carries the corrected options inside the question field, so the evaluation prompt for those items contained the corrected option list followed by the original one. Gains between original and corrected text are of the same size on those 173 items and on the 160 correctly formatted ones for every model. `audit-sample-400-corrected-repaired.csv` is the clean version for future use.
+**Note on the corrected file.** The model runs reported in the paper used `audit-sample-400-corrected.csv` as it is here. For 173 of the 333 FIXABLE items that file carries the corrected options inside the question field, so the evaluation prompt for those items contained the corrected option list followed by the original one. For every model, the gain between original and corrected text on those 173 items and on the 160 correctly formatted ones differs by less than three points. `audit-sample-400-corrected-repaired.csv` is the clean version for future use.
 
 `annotations-400.csv` columns: `A_*` and `B_*` are the two independent passes (1 = pass, 0 = fail on each criterion); `final_verdict` / `final_origin` are post-adjudication; `adjudicated` marks the 119 items whose three-way verdict differed between annotators.
 

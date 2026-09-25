@@ -1,8 +1,10 @@
-# TunisianMMLU audit — annotation guideline (v0, calibrate before trusting)
+# TunisianMMLU audit: annotation guideline
+
+The instructions given to the two annotators on 5 August 2026. Label definitions, verdict rules and worked examples are unchanged; scheduling notes and the annotators' personal details have been removed. The counts in the marker table were computed over the question field only, before the corpus scanner was finalised; the released scanner (`automatic_markers.py`) counts the question and the options together, which is why the paper reports larger figures (for example 624 items with فيي and 456 with a literal `\n`).
 
 Two annotators, same 400 items, same order, independently. **Never look at the
-other person's sheet while annotating.** Disagreements are settled by Fatma
-after both finish — that is the adjudication step, not a discussion during.
+other person's sheet while annotating.** Disagreements are settled by annotator A
+after both finish; that is the adjudication step, not a discussion during annotation.
 
 For every item: read question + context + choices, then set each of the six
 labels to **1 (pass) or 0 (fail)**. Then one verdict, then (only if FIXABLE)
@@ -78,7 +80,7 @@ once — that is normal and expected.
 
 ### The trap: an item that LOOKS broken and isn't
 
-**Example** (`islamic_studies`, one of the blue rows):
+**Example** (`islamic_studies`, one of the blue rows of the annotation sheet):
 
 > **question:** النص اللي قبل هو
 > **context:** اللهم صلي على محمد، وعلى آل محمد، كيما صليتي على آل إبراهيم…
@@ -119,8 +121,7 @@ the sentence is grammatical Arabic but no Tunisian would produce it.
 
 **msa_moroccan_interference** — 1 = clean of intrusions. 0 if it contains
 Moroccan features (كي-/كت- verb prefixes, گ, جوج, ديال, غادي, داك الشي…) or
-long stretches of pure MSA where Derja should be. Expect this to fire a lot:
-the first rows of high_school_psychology are visibly Moroccan.
+long stretches of pure MSA where Derja should be. Expect this to fire often.
 
 **orthographic_naturalness** — Is the spelling how Tunisians write Derja? 0
 for impossible spellings, broken characters, or transliteration artifacts.
@@ -143,11 +144,9 @@ Rule of thumb: if fixing takes more than ~90 seconds, it's a DISCARD.
 
 ## error_origin — ONLY when the verdict is not OK
 
-**This column is what makes the headline number survive review.** MMLU itself
-has a ~6.49% error rate (Gema et al., "Are We Done with MMLU?", MMLU-Redux).
-So some broken items were broken BEFORE anyone translated them. If we report
-one total error rate without separating these, the first reviewer says we
-blamed NLLB for MMLU's own mistakes — and they'd be right.
+MMLU itself has an estimated 6.49% error rate (Gema et al., "Are We Done
+with MMLU?", MMLU-Redux), so some items were defective before anyone translated
+them. This label separates those from the damage done by translation.
 
 - **TRANSLATION** — this item would be fine in correct Derja. The damage is
   in the language: Moroccan forms, MSA leakage, garbled wording, impossible
@@ -161,38 +160,8 @@ blamed NLLB for MMLU's own mistakes — and they'd be right.
 Judge from the Derja alone. Do not go looking for the English original —
 that would make the two annotators non-independent and cost hours.
 
-## Calibration (before the real 400)
+## Order of work
 
-1. Both annotators do items 1–20 of the sheet independently.
-2. Compare line by line. Where you disagreed, work out whether the label
-   definition was unclear — fix the wording above, not just the answer.
-3. **Time yourselves.** Minutes per item × 380 remaining = the real plan.
-4. During calibration, collect 2 pass + 2 fail REAL examples per label and
-   paste them under the definitions above. [TODO — Fatma, during calibration]
-5. Only then start item 21.
-
-## Record this before annotating — one line, goes in the paper
-
-For EACH annotator: region of origin and age band. That is all.
-
-WHY: annotation papers are expected to report annotator background — it is
-a reporting convention, and a reviewer will look for it. It is NOT a worry
-about judgment: Tunisians understand regional variation across the country,
-so a southerner will not mark a Tunis form as inauthentic. Record it, state
-it in one sentence, move on.
-
-Annotator A (Mai): south of Tunisia, 17
-Annotator B (Mariem Masri): __________ region, __________ age
-
-Note for the paper's method section: neither annotator works in NLP
-(Mariem) or has prior annotation experience. State this as a STRENGTH,
-not an apology — an annotator who does not know what the study hopes to
-find cannot unconsciously label toward the hypothesis. Both are native
-Tunisian speakers resident in Tunisia, which is the qualification the
-task actually requires.
-
-## Bookkeeping
-
-Seed 20260805, sample built by `build-audit-sample.py`, both annotators work
-in `annotation_order`. If annotator B stops early, everything up to their last
-completed item is still a valid random sample — record the stopping point.
+Seed 20260805, sample built by `build-audit-sample.py`; both annotators work
+in `annotation_order`. If an annotator stops early, everything up to the last
+completed item is still a valid random sample.
