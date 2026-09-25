@@ -1,50 +1,62 @@
-# TunisianMMLU audit — model evaluation
+# TunisianMMLU-Verified
 
-Private until camera-ready.
+Native-speaker audit of [linagora/TunisianMMLU](https://huggingface.co/datasets/linagora/TunisianMMLU), a machine-translated MMLU-style benchmark for Tunisian Arabic (Derja).
 
-## Data
+Paper: *Is TunisianMMLU Actually Tunisian? A Native-Speaker Audit of a Machine-Translated Dialect Benchmark*, MRL 2026 (EMNLP workshop), Budapest. [ACL Anthology link to be added when the proceedings are out.]
 
-`audit-sample-400-master.csv` — 400 items stratified over all 44 subjects,
-seed 20260805, from [linagora/TunisianMMLU](https://huggingface.co/datasets/linagora/TunisianMMLU).
-CC BY-NC-SA 4.0, inherited.
+Hugging Face mirror of the data files: https://huggingface.co/datasets/HF-USER/TunisianMMLU-Verified
 
-`results-<tag>.csv` — one model's answers. `-corrected` suffix for the
-second pass over corrected items.
+Every artifact is keyed to the original item identifier `subject::row` (row index within the subject's test split, as downloaded in August 2026), so corrections and flags can be merged upstream rather than forking the benchmark.
 
-## Run
+## What is here
 
-Install [uv](https://docs.astral.sh/uv/), synchronize the locked environment,
-and run the evaluator:
+| File | What it is | Licence |
+|---|---|---|
+| `audit-sample-400-master.csv` | The 400 audited items as released by TunisianMMLU (stratified over 44 subjects, seed 20260805, floor 4 per subject). | CC BY-NC-SA 4.0 (inherited) |
+| `annotations-400.csv` | Per-item labels from both annotators (six binary criteria, verdict, error origin), the adjudicated final verdict and origin, and annotator A's raw correction field. | CC BY 4.0 |
+| `audit-sample-400-corrected.csv` | The 389-item corrected subset exactly as evaluated in the paper (corrected text for the 333 FIXABLE items, unchanged text for the 56 OK items, 11 DISCARD items excluded). For 173 items the annotator's corrected option list sits inside the `question` field after `|||` and the `choices` field still holds the original options; see the note below. | CC BY-NC-SA 4.0 (derived) |
+| `audit-sample-400-corrected-repaired.csv` | The same subset with those 173 items split back into `question` and `choices` (corrected question for 329 items, corrected options for 172). Not used for the numbers in the paper. | CC BY-NC-SA 4.0 (derived) |
+| `automatic-markers.csv` | Corpus-wide flag and repair-cost severity for all 21,500 items. | CC BY 4.0 |
+| `automatic_markers.py` | The scanner: patterns, exclusion list, counts. Running it reproduces `automatic-markers.csv` and the 63.4% corpus figure in the paper. | MIT |
+| `annotation-guideline.md` | The guideline given to both annotators, with worked examples drawn from outside the sample. | CC BY 4.0 |
+| `prefix-spotcheck-30.csv` | The 30 prefix-only flagged items checked by annotator A. | CC BY 4.0 |
+| `build-audit-sample.py` | Downloads the benchmark and rebuilds the sample. | MIT |
+| `run_eval_litellm.py`, `score.py`, `paper_stats.py`, `run_all.sh` | Evaluation harness and the script that recomputes every model number in the paper. | MIT |
+| `results-<model>.csv`, `results-<model>-corrected.csv` | Per-item model answers on original and corrected text. | CC BY 4.0 |
+
+**Note on the corrected file.** The model runs reported in the paper used `audit-sample-400-corrected.csv` as it is here. For 173 of the 333 FIXABLE items that file carries the corrected options inside the question field, so the evaluation prompt for those items contained the corrected option list followed by the original one. Gains between original and corrected text are of the same size on those 173 items and on the 160 correctly formatted ones for every model. `audit-sample-400-corrected-repaired.csv` is the clean version for future use.
+
+`annotations-400.csv` columns: `A_*` and `B_*` are the two independent passes (1 = pass, 0 = fail on each criterion); `final_verdict` / `final_origin` are post-adjudication; `adjudicated` marks the 119 items whose three-way verdict differed between annotators.
+
+## Reproduce
 
 ```bash
 uv sync --locked
-uv run python run_eval_litellm.py --model openai/gpt-5 --tag gpt5 --max-tokens 256
-uv run python score.py
+python3 build-audit-sample.py            # downloads the 44 parquet files (~4 MB)
+python3 automatic_markers.py             # corpus scan, writes automatic-markers.csv
+python3 paper_stats.py                   # Tables 2 and 3, McNemar, Holm, gap figures
 ```
 
-`./run_all.sh` runs the configured generic batch and then scores its results.
-Completed items are skipped, so interrupted runs can be resumed.
+Model runs (see the docstring of `run_eval_litellm.py` for the exact commands per backend):
 
-`--items` swaps in the corrected subset. `ollama_chat/<model>` goes directly
-to Ollama with a JSON-schema constrained answer; default runs use LiteLLM.
-`--openai-compatible` selects the provider-neutral direct transport and
-requires `--api-base` and `--api-key-env`; `--header` is repeatable.
-By default, an unparsable response is recorded with `pred=-1`. Set
-`--unparsed-retry-max-tokens` to retry once with a larger budget. For
-`--openai-compatible` runs, `--unparsed-use-answer-tool` adds a constrained
-answer-tool fallback after that retry.
+```bash
+uv run python run_eval_litellm.py --model openai/gpt-5.6-sol --tag gpt-5.6-sol --max-tokens 256
+uv run python run_eval_litellm.py --model openai/gpt-5.6-sol --tag gpt-5.6-sol-corrected --max-tokens 256 --items audit-sample-400-corrected.csv   # as in the paper
+```
 
-| Model | Original dataset version, matched 389 | Corrected dataset version, 389 | Delta (percentage points) |
-|---|---:|---:|---:|
-| Gemini 3.1 Pro | 354/389 (91.0%) | 363/389 (93.3%) | +2.3 pp |
-| GPT-5.6 Sol | 348/389 (89.5%) | 359/389 (92.3%) | +2.8 pp |
-| Claude Sonnet 5 | 313/389 (80.5%) | 332/389 (85.3%) | +4.9 pp |
-| Qwen3-8B (4-bit) | 193/389 (49.6%) | 205/389 (52.7%) | +3.1 pp |
-| ESPRIT-Derja-8B (4-bit) | 185/389 (47.6%) | 204/389 (52.4%) | +4.9 pp |
-| Labess-7B (4-bit) | 115/389 (29.6%) | — | — |
+## Citation
 
-For a matched comparison, original predictions from `results-<tag>.csv` are
-filtered to the 389 item IDs in `audit-sample-400-corrected.csv` before
-scoring. Corrected scores come from `results-<tag>-corrected.csv`; 11 items
-from the 400-item master set are excluded. Deltas use the unrounded count
-fractions. Labess has no committed corrected run.
+```bibtex
+@inproceedings{jlali-suppa-2026-tunisianmmlu,
+  title     = {Is {T}unisian{MMLU} Actually {T}unisian? A Native-Speaker Audit of a Machine-Translated Dialect Benchmark},
+  author    = {Jlali, Fatma Ezzahra and {\v{S}}uppa, Marek},
+  booktitle = {Proceedings of the 6th Workshop on Multilingual Representation Learning (MRL 2026)},
+  year      = {2026},
+  address   = {Budapest, Hungary},
+  publisher = {Association for Computational Linguistics}
+}
+```
+
+## Licences
+
+Three licences apply, by file, as listed above. The corrected Derja text is a derivative of TunisianMMLU and carries its CC BY-NC-SA 4.0 licence. Labels, flags, the guideline and the result files are newly authored and released under CC BY 4.0. Code is MIT. See `LICENSE-code`, `LICENSE-labels`, `LICENSE-corrected-text`.

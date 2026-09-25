@@ -2,11 +2,22 @@
 
 !.gitignore
 !README.md
+!LICENSE-code
+!LICENSE-labels
+!LICENSE-corrected-text
 !run_eval_litellm.py
 !score.py
+!paper_stats.py
 !run_all.sh
+!build-audit-sample.py
+!automatic_markers.py
+!automatic-markers.csv
 !audit-sample-400-master.csv
 !audit-sample-400-corrected.csv
+!audit-sample-400-corrected-repaired.csv
+!annotations-400.csv
+!annotation-guideline.md
+!prefix-spotcheck-30.csv
 !results-*.csv
 !pyproject.toml
 !uv.lock
