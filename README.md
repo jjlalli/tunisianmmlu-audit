@@ -4,7 +4,7 @@ Native-speaker audit of [linagora/TunisianMMLU](https://huggingface.co/datasets/
 
 Paper: *Is TunisianMMLU Actually Tunisian? A Native-Speaker Audit of a Machine-Translated Dialect Benchmark*, MRL 2026 (EMNLP workshop), Budapest. [ACL Anthology link to be added when the proceedings are out.]
 
-Hugging Face mirror of the data files: [https://huggingface.co/datasets/HF-USER/TunisianMMLU-Verified](https://huggingface.co/datasets/fatmajlali/TunisianMMLU-Verified)
+Hugging Face mirror of the data files: [https://huggingface.co/datasets/fatmajlali/TunisianMMLU-Verified](https://huggingface.co/datasets/fatmajlali/TunisianMMLU-Verified)
 
 Every artifact is keyed to the original item identifier `subject::row` (row index within the subject's test split, as downloaded in August 2026), so corrections and flags can be merged upstream rather than forking the benchmark.
 
