@@ -44,6 +44,17 @@ uv run python run_eval_litellm.py --model openai/gpt-5.6-sol --tag gpt-5.6-sol -
 uv run python run_eval_litellm.py --model openai/gpt-5.6-sol --tag gpt-5.6-sol-corrected --max-tokens 256 --items audit-sample-400-corrected.csv   # as in the paper
 ```
 
+## Model identifiers
+
+- Gemini 3.1 Pro: `google/gemini-3.1-pro-global`
+- GPT-5.6 Sol: `openai/gpt-5.6-sol`
+- Claude Sonnet 5: `anthropic/claude-sonnet-5`
+- Qwen3-8B: `Qwen/Qwen3-8B` (4-bit)
+- ESPRIT-Derja-8B: `ESPRIT-Group/ESPRIT-Derja-Qwen3-8B-v2` (4-bit)
+- Labess-7B: `linagora/Labess-7b-chat-gguf` (`Q4_K_M`)
+
+Matched 389-item results (original / corrected): Gemini 3.1 Pro 354 / 363, GPT-5.6 Sol 348 / 359, Claude Sonnet 5 313 / 332, Qwen3-8B 193 / 205, ESPRIT-Derja-8B 185 / 204, Labess-7B 115 / 116.
+
 ## Citation
 
 ```bibtex
