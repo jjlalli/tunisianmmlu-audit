@@ -2,7 +2,9 @@
 
 Native-speaker audit of [linagora/TunisianMMLU](https://huggingface.co/datasets/linagora/TunisianMMLU), a machine-translated MMLU-style benchmark for Tunisian Arabic (Derja).
 
-Paper: *Is TunisianMMLU Actually Tunisian? A Native-Speaker Audit of a Machine-Translated Dialect Benchmark*, MRL 2026 (EMNLP workshop), Budapest. [ACL Anthology link to be added when the proceedings are out.]
+Paper: **Is TunisianMMLU Actually Tunisian? A Native-Speaker Audit of a Machine-Translated Dialect Benchmark.** Fatma Ezzahra Jlali and Marek Šuppa. 6th Workshop on Multilingual Representation Learning (MRL 2026), EMNLP 2026, Budapest. Camera-ready: [`paper.pdf`](paper.pdf); poster: [`poster.pdf`](poster.pdf). ACL Anthology link to follow.
+
+Two native speakers independently labelled a stratified 400-item sample: 86.0% of items are defective after adjudication (62.0% by the independent agreement of both annotators, 64.5% by the non-author annotator alone), almost all through translation rather than the source questions. A marker scan flags 63.4% of all 21,500 items for Moroccan-dialect markers or pipeline artifacts; the Moroccan present-tense prefix alone is in 55.1%. On the corrected text every above-chance model gains 2.3 to 4.9 accuracy points; Labess-7B, at chance, is unchanged.
 
 Hugging Face mirror of the data files: [https://huggingface.co/datasets/fatmajlali/TunisianMMLU-Verified](https://huggingface.co/datasets/fatmajlali/TunisianMMLU-Verified)
 
@@ -67,6 +69,10 @@ Matched 389-item results (original / corrected): Gemini 3.1 Pro 354 / 363, GPT-5
   publisher = {Association for Computational Linguistics}
 }
 ```
+
+## See also
+
+[Tunisian-Derja-NLP-Resources](https://github.com/jjlalli/Tunisian-Derja-NLP-Resources): an inventory of Tunisian Arabic NLP resources.
 
 ## Licences
 
